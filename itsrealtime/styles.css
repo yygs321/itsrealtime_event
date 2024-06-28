@@ -1,0 +1,142 @@
+/* CSS 코드 */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+form {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.url-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.url-section label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.url-section input {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.button {
+    padding: 8px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.submit-button {
+    background-color: #04B486;
+    width: 7%;
+}
+
+.recent-button {
+    background-color: #5882FA;
+    width: 18%;
+}
+
+.save-button {
+    background-color: #FA5858;
+    width: 18%;
+}
+
+.submit-button:focus,
+.recent-button:focus {
+    outline: none;
+}
+
+hr {
+    margin: 20px 0;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+td:first-child {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.option-button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f4f4f4;
+    cursor: pointer;
+}
+
+.option-button.active {
+    background-color: #5882FA;
+    color: white;
+}
+
+.option-button.inactive {
+    background-color: #FA5858;
+    color: white;
+}
+
+.results td:empty {
+    display: none;
+}
+
+th.condition {
+    width: 45%;
+    /* 조건 열의 너비 비율 */
+}
+
+th.condition-status {
+    width: 20%;
+    /* 조건 충족 여부 열의 너비 비율 */
+}
+
+th.result {
+    width: 35%;
+    /* 결과 열의 너비 비율 */
+}
+
+#title_count {
+    width: 10%;
+}
+
+input[type="text"] {
+    text-align: right;
+}
