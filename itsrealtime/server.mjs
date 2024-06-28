@@ -6,6 +6,11 @@ import fetch from 'node-fetch';
 import cheerio from 'cheerio';
 import { writeFile, readFile } from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ESM 모듈에서 __dirname을 설정하는 부분
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = 3000;
@@ -99,12 +104,10 @@ app.post('/saveCurrentValue', async (req, res) => {
 });
 
 // 최근 값 불러오기 엔드포인트
-// 최근 값 불러오기 엔드포인트
 app.get('/loadRecentValue', async (req, res) => {
-    console.log("--------")
+    console.log('--------');
     console.log('Current working directory:', process.cwd()); // 현재 작업 디렉토리 출력
     try {
-        //const filePath = '/Desktop/project/itsrealtime/currentValues.txt';
         // 절대 경로로 파일 경로 설정
         const filePath = path.resolve(__dirname, 'currentValues.txt');
         console.log('Reading file from:', filePath); // 파일 경로 출력
