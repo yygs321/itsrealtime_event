@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>조건 충족 여부 확인</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <form id="conditionForm">
+        <div class="url-section">
+            <label for="url">URL</label>
+            <input type="text" id="url" name="url">
+            <button type="button" class="submit-button" onclick="checkConditions()">전송</button>
+        </div>
+
+        <hr>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">조건</th>
+                        <th>조건 충족 여부</th>
+                        <th>결과</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="title">제목</label>
+                        </td>
+                        <td>
+                            <input type="text" id="title" name="title">
+                            <span>포함</span>
+                        </td>
+                        <td id="result-title"></td>
+                        <td id="reason-title"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="content">내용</label>
+                        </td>
+                        <td>
+                            <input type="text" id="content" name="content">
+                            <span>자 이상</span>
+                        </td>
+                        <td id="result-content"></td>
+                        <td id="reason-content"></td>
+                    </tr>
+                    <tr>
+                        <td>지도(장소) 삽입</td>
+                        <td class="option-buttons" data-type="map">
+                            <button type="button" class="option-button">O</button>
+                            <button type="button" class="option-button">X</button>
+                        </td>
+                        <td id="result-map"></td>
+                        <td id="reason-map"></td>
+                    </tr>
+                    <tr>
+                        <td>전체 공개</td>
+                        <td class="option-buttons" data-type="public">
+                            <button type="button" class="option-button">O</button>
+                            <button type="button" class="option-button">X</button>
+                        </td>
+                        <td id="result-public"></td>
+                        <td id="reason-public"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="photos">사진</label>
+                        </td>
+                        <td>
+                            <input type="text" id="photos" name="photos">
+                            <span>장 이상</span>
+                        </td>
+                        <td id="result-photos"></td>
+                        <td id="reason-photos"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="button-container">
+            <button type="button" onclick="loadRecentConditions()" class="recent-condition-button">최근 조건 불러오기</button>
+        </div>
+    </form>
+    <script src="script.js"></script>
+</body>
+
+</html>
