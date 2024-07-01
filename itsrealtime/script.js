@@ -201,13 +201,45 @@ async function loadRecentValue() {
 
 
 // 블로그 내용을 가져오는 함수
-async function fetchBlogContent(url) {
+async function fetchBlogContent() {
+    const url = document.getElementById('url').value;
+    const title = document.getElementById('title').value;
+    const title_count = document.getElementById('title_count').value;
+    const content = document.getElementById('content').value;
+    const photos = document.getElementById('photos').value;
+    const map = document.querySelector('.option-buttons[data-type="map"] .selected');
+    const publicOption = document.querySelector('.option-buttons[data-type="public"] .selected');
+
+
+    const requestDto = {
+        url: url,
+        title: title,
+        title_count: title_count,
+        content: content,
+        photos: photos,
+        map: map ? map.textContent === 'O' : false,
+        public: publicOption ? publicOption.textContent === 'O' : false
+    };
+
+    console.log('보내는 데이터:', requestDto); // 보내는 데이터 확인
+
     try {
-        const response = await fetch(url);
+
+        const response = await fetch('http://localhost:3000/fetchBlogContent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestDto),
+            mode: 'cors' //CORS 설정 활성화
+        })
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('네트워크 응답이 실패했습니다.');
         }
-        return await response.text();
+
+        const data = await response.json(); // JSON 형식으로 파싱된 데이터 반환
+        console.log('서버로부터 받은 데이터:', data);
+
     } catch (error) {
         console.error('Error fetching blog content:', error);
         throw error;
