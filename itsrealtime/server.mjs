@@ -105,8 +105,6 @@ app.post('/saveCurrentValue', async (req, res) => {
 
 // 최근 값 불러오기 엔드포인트
 app.get('/loadRecentValue', async (req, res) => {
-    console.log('--------');
-    console.log('Current working directory:', process.cwd()); // 현재 작업 디렉토리 출력
     try {
         // 절대 경로로 파일 경로 설정
         const filePath = path.resolve(__dirname, 'currentValues.txt');

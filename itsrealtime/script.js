@@ -159,37 +159,37 @@ async function loadRecentValue() {
         if (!response.ok) {
             throw new Error('최근 값 불러오기 중 오류 발생');
         }
-        console.log(response.json);
-        const { formData, optionButtonsData } = await response.json();
+
+        // response.json() 함수를 호출하여 실제 데이터를 얻습니다.
+        const data = await response.json();
+        const { url, title, count, content, photos, optionButtons } = data;
 
         // 콘솔에 데이터 출력
-        console.log('불러온 formData:', formData);
-        console.log('불러온 optionButtonsData:', optionButtonsData);
+        console.log(data);
 
         // Form 데이터로 입력 폼 채우기
-        for (const key in formData) {
-            if (formData.hasOwnProperty(key)) {
-                const element = document.getElementById(key);
-                if (element) {
-                    element.value = formData[key];
-                }
-            }
-        }
+        document.getElementById('url').value = url;
+        document.getElementById('title').value = title;
+        document.getElementById('title_count').value = count;
+        document.getElementById('content').value = content;
+        document.getElementById('photos').value = photos;
 
         // Option-buttons 상태 복원
+        const optionButtonsData = JSON.parse(optionButtons);
         for (const type in optionButtonsData) {
             if (optionButtonsData.hasOwnProperty(type)) {
                 const selectedValue = optionButtonsData[type] ? 'O' : 'X';
                 const buttonGroup = document.querySelector(`.option-buttons[data-type="${type}"]`);
                 const buttons = buttonGroup.querySelectorAll('.option-button');
                 buttons.forEach(button => {
-                    button.classList.remove('selected');
+                    button.classList.remove('selected', 'active', 'inactive');
                     if (button.textContent.trim() === selectedValue) {
-                        button.classList.add('selected');
+                        button.classList.add('selected', selectedValue === 'O' ? 'active' : 'inactive');
                     }
                 });
             }
         }
+
 
         alert('최근 값이 성공적으로 불러와졌습니다.');
     } catch (error) {
@@ -197,6 +197,7 @@ async function loadRecentValue() {
         alert('최근 값 불러오기 중 오류가 발생했습니다.');
     }
 }
+
 
 
 // 블로그 내용을 가져오는 함수
