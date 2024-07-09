@@ -98,7 +98,7 @@ async function loadRecentValue() {
 
         // response.json() 함수를 호출하여 실제 데이터를 얻습니다.
         const data = await response.json();
-        const { url, title, count, content, photos, optionButtons } = data;
+        const { url, title, title_count, content, photos, optionButtons } = data;
 
         // 콘솔에 데이터 출력
         console.log(data);
@@ -106,7 +106,7 @@ async function loadRecentValue() {
         // Form 데이터로 입력 폼 채우기
         document.getElementById('url').value = url;
         document.getElementById('title').value = title;
-        document.getElementById('title_count').value = count;
+        document.getElementById('title_count').value = title_count;
         document.getElementById('content').value = content;
         document.getElementById('photos').value = photos;
 

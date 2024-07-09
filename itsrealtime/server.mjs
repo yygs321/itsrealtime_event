@@ -77,6 +77,7 @@ app.get('/loadRecentValue', async (req, res) => {
         const data = await readFile(filePath, 'utf8');
         const parsedData = JSON.parse(data);
 
+        console.log('Loaded recent values:', parsedData); // 데이터 출력
         res.json(parsedData);
     } catch (error) {
         console.error('Error loading recent value:', error);
