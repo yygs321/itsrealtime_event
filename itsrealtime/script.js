@@ -21,53 +21,6 @@ document.querySelectorAll('.option-buttons .option-button').forEach(button => {
     button.addEventListener('click', () => toggleOption(button));
 });
 
-// 조건들을 검사하고 결과를 표시하는 함수
-function checkConditions() {
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
-    const map = document.querySelector('.option-buttons[data-type="map"] .selected');
-    const publicOption = document.querySelector('.option-buttons[data-type="public"] .selected');
-    const photos = document.getElementById('photos').value;
-    const url = document.getElementById('url').value;
-
-    // 결과 초기화
-    clearResults();
-
-    // 제목 조건 검사
-    if (title.includes('포함')) {
-        setResult('result-title', true);
-    } else {
-        setResult('result-title', false, '제목에 "포함"이 포함되지 않음');
-    }
-
-    // 내용 길이 조건 검사
-    if (content.length >= 100) {
-        setResult('result-content', true);
-    } else {
-        setResult('result-content', false, `내용이 100자 미만 (${content.length}/100)`);
-    }
-
-    // 지도(장소) 삽입 여부 확인
-    if (map) {
-        checkMapExistence(url);
-    } else {
-        setResult('result-map', false, '지도(장소) 삽입 없음');
-    }
-
-    // 전체 공개 설정 확인
-    if (publicOption) {
-        checkPublicSetting(url);
-    } else {
-        setResult('result-public', false, '전체 공개 설정되지 않음');
-    }
-
-    // 사진 갯수 조건 검사
-    if (photos.length >= 5) {
-        setResult('result-photos', true);
-    } else {
-        setResult('result-photos', false, `사진이 5장 미만 (${photos.length}/5)`);
-    }
-}
 
 // 결과를 특정 요소에 표시하는 함수
 function setResult(id, isSuccess, reason = '') {
@@ -75,7 +28,7 @@ function setResult(id, isSuccess, reason = '') {
     const reasonElement = document.getElementById(`reason-${id.split('-')[1]}`);
     resultElement.innerText = isSuccess ? 'O' : 'X';
     resultElement.style.color = isSuccess ? 'blue' : 'red';
-    if (!isSuccess && reason) {
+    if (reasonElement) {
         reasonElement.innerText = reason;
     }
 }
@@ -88,30 +41,13 @@ function clearResults() {
     reasons.forEach(reason => reason.innerText = '');
 }
 
-// 지도(장소) 삽입 여부를 확인하는 함수
-function checkMapExistence(url) {
-    fetchBlogContent(url)
-        .then(content => {
-            const mapExists = content.includes('<iframe class="se2_iframe"');
-            setResult('result-map', mapExists, mapExists ? '' : '지도(장소) 삽입 없음');
-        })
-        .catch(error => {
-            console.error('Error fetching blog content:', error);
-            setResult('result-map', false, '블로그 내용을 가져오는 도중 오류 발생');
-        });
-}
-
-// 전체 공개 설정 여부를 확인하는 함수
-function checkPublicSetting(url) {
-    fetchBlogContent(url)
-        .then(content => {
-            const isPublic = content.includes('<span class="post_public">전체 공개</span>');
-            setResult('result-public', isPublic, isPublic ? '' : '전체 공개 설정되지 않음');
-        })
-        .catch(error => {
-            console.error('Error fetching blog content:', error);
-            setResult('result-public', false, '블로그 내용을 가져오는 도중 오류 발생');
-        });
+// 서버로부터 받은 데이터를 페이지에 표시하는 함수
+function displayResults(data, requestDto) {
+    setResult('result-title', data.isTitleSatisfied, `포함 단어: ${data.matchedWords.join(', ')}`);
+    setResult('result-content', data.isLengthSatisfied, `${data.totalTextLength} / ${requestDto.content}`);
+    setResult('result-photos', data.isPhotoCountSatisfied, `${data.imageCount} / ${requestDto.photos}`);
+    setResult('result-public', data.isPublic === requestDto.publicOption, '');
+    setResult('result-map', data.hasMap === requestDto.map, '');
 }
 
 // 현재 값을 서버에 저장하는 함수
@@ -240,6 +176,8 @@ async function fetchBlogContent() {
         const data = await response.json(); // JSON 형식으로 파싱된 데이터 반환
         console.log('서버로부터 받은 데이터:', data);
 
+        // 결과를 화면에 표시
+        displayResults(data, requestDto);
     } catch (error) {
         console.error('Error fetching blog content:', error);
         throw error;

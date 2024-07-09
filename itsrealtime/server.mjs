@@ -25,11 +25,22 @@ app.use(bodyParser.json());
 // URL을 받아서 블로그 내용을 가져오는 엔드포인트
 app.post('/fetchBlogContent', async (req, res) => {
     const url = req.body.url;
-    const wordsToCheck = req.body.title.split(',');
 
     try {
         const result = await runPythonScript(url);
-        console.log("result:")
+
+        // 결과와 요청 값을 비교하여 포함된 단어들과 갯수를 가져옴
+        const { isTitleSatisfied, matchedWords, matchedCount, isLengthSatisfied, isPhotoCountSatisfied }
+            = compareRequestAndResult(req.body, result);
+
+        // 결과에 matchedWords, matchedCount 등을 추가
+        result.isTitleSatisfied = isTitleSatisfied;
+        result.matchedWords = matchedWords;
+        result.matchedCount = matchedCount;
+        result.isLengthSatisfied = isLengthSatisfied;
+        result.isPhotoCountSatisfied = isPhotoCountSatisfied;
+
+
         if (result) {
             res.json(result);
             console.log(result);
@@ -95,13 +106,11 @@ function runPythonScript(url) {
         //정상 출력
         pythonProcess.stdout.on('data', (data) => {
             result += data.toString();
-            console.log(result);
         });
 
         //오류 출력
         pythonProcess.stderr.on('data', (data) => {
             error += data.toString();
-            //console.log(error)
         });
 
         //종료시 이벤트
@@ -118,4 +127,35 @@ function runPythonScript(url) {
             }
         });
     });
+}
+
+// 요청 값과 결과 값을 비교하여 포함된 단어들과 갯수를 반환하는 함수
+function compareRequestAndResult(request, result) {
+    const matchedWords = [];
+    let matchedCount = 0;
+    let isTitleSatisfied = false;
+    let isLengthSatisfied = false;
+    let isPhotoCountSatisfied = false;
+    const wordsToCheck = request.title.toLowerCase().split(',').map(word => word.trim().toLowerCase());
+
+    wordsToCheck.forEach(word => {
+        if (result.title.toLowerCase().includes(word)) {
+            matchedWords.push(word);
+            matchedCount++;
+        }
+    });
+
+    if (matchedCount >= request.title_count) {
+        isTitleSatisfied = true;
+    }
+
+    if (result.totalTextLength >= request.content) {
+        isLengthSatisfied = true;
+    }
+
+    if (result.imageCount >= request.photos) {
+        isPhotoCountSatisfied = true;
+    }
+
+    return { isTitleSatisfied, matchedWords, matchedCount, isLengthSatisfied, isPhotoCountSatisfied };
 }
