@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>조건 충족 여부 확인</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <form id="conditionForm">
+        <div class="url-section">
+            <label for="url">URL</label>
+            <input type="text" id="url" name="url">
+            <button type="button" class="button submit-button" onclick="fetchBlogContent()">전송</button>
+        </div>
+
+        <hr>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2" class="condition">조건</th>
+                        <th class="condition-status">조건 충족 여부</th>
+                        <th class="result">결과</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="title">제목</label>
+                        </td>
+                        <td>
+                            <input type="text" id="title" name="title">
+                            <span>中 </span>
+                            <input type="text" id="title_count" name="title_count">
+                            <span>개 포함 </span>
+                        </td>
+                        <td id="result-title"></td>
+                        <td id="reason-title"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="content">내용</label>
+                        </td>
+                        <td>
+                            <input type="text" id="content" name="content" style="width: 97px">
+                            <span>자 이상 (띄어쓰기 포함) </span>
+                        </td>
+                        <td id="result-content"></td>
+                        <td id="reason-content"></td>
+                    </tr>
+                    <tr>
+                        <td>지도(장소) 삽입</td>
+                        <td class="option-buttons" data-type="map">
+                            <button type="button" class="option-button">O</button>
+                            <button type="button" class="option-button">X</button>
+                        </td>
+                        <td id="result-map"></td>
+                        <td id="reason-map"></td>
+                    </tr>
+                    <tr>
+                        <td>전체 공개</td>
+                        <td class="option-buttons" data-type="public">
+                            <button type="button" class="option-button">O</button>
+                            <button type="button" class="option-button">X</button>
+                        </td>
+                        <td id="result-public"></td>
+                        <td id="reason-public"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="photos">사진</label>
+                        </td>
+                        <td>
+                            <input type="text" id="photos" name="photos" style="width: 200px">
+                            <span>장 이상</span>
+                        </td>
+                        <td id="result-photos"></td>
+                        <td id="reason-photos"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="controls">
+            <button type="button" class="button recent-button" onclick="loadRecentValue()">최근 값 불러오기</button>
+            <button type="button" class="button save-button" onclick="saveCurrentValue()">현재 값 저장하기</button>
+        </div>
+    </form>
+    <script src="script.js"></script>
+</body>
+
+</html>
