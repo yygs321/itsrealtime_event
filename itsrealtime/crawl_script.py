@@ -4,10 +4,19 @@ from bs4 import BeautifulSoup
 
 
 def crawl(url):
+    result = {
+        'title': '',
+        'totalTextLength': '',
+        'imageCount': '',
+        'isPublic': False,
+        'hasMap': False
+    }
+
     try:
         # 웹 페이지 요청
         response = requests.get(url)
         response.raise_for_status()  # HTTP 오류 확인
+        result['isPublic'] = True  # 에러 없으면 전체공개
 
         # BeautifulSoup을 사용하여 HTML 파싱
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -37,17 +46,24 @@ def crawl(url):
                 image_count += 1
 
         # 결과 반환
-        result = {
-            'title': title,
-            'totalTextLength': total_text_length,
-            'imageCount': image_count
-        }
+        result['title'] = title
+        result['totalTextLength'] = total_text_length
+        result['imageCount'] = image_count
+
+        # 지도 유무 확인
+        map_element = soup.find("a", attrs={'class': 'se-map-info'})
+        if map_element:
+            map_location = map_element.find("strong", class_="se-map-title")
+            map_location = map_location.get_text(strip=True)
+            if map_location == '잇츠리얼타임 독서실 스터디카페':
+                result['hasMap'] = True
+
         return result
 
     except Exception as e:
         # 오류 발생 시 처리
-        print(f"Error crawling content from {url}: {e}")
-        return None
+        result['isPublic'] = False
+        return result
 
 
 # 스크립트 실행 부분 (입력 받기)
