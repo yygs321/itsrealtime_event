@@ -9,8 +9,7 @@ def crawl(url):
         'totalTextLength': '',
         'imageCount': '',
         'isPublic': False,
-        'hasMap': False,
-        'mapList': []
+        'hasMap': False
     }
 
     try:
@@ -52,12 +51,11 @@ def crawl(url):
         result['imageCount'] = image_count
 
         # 지도 유무 확인
-        map_elements = soup.find_all_next(
-            "strong", class_="se-map-title")
-
+        map_elements = soup.select('a.se-map-info.__se_link')
         for map_element in map_elements:
-            result['mapList'].append(map_element)
-            if map_element == '잇츠리얼타임 독서실 스터디카페':
+            # 해당 요소 안에서 strong 태그 중 class가 se-map-title인 요소 찾기
+            location = map_element.find('strong', class_='se-map-title')
+            if location and location.text.strip() == '잇츠리얼타임 독서실 스터디카페':
                 result['hasMap'] = True
                 break
 
