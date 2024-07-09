@@ -204,9 +204,9 @@ async function loadRecentValue() {
 async function fetchBlogContent() {
     const url = document.getElementById('url').value;
     const title = document.getElementById('title').value;
-    const title_count = document.getElementById('title_count').value;
-    const content = document.getElementById('content').value;
-    const photos = document.getElementById('photos').value;
+    const title_count = parseInt(document.getElementById('title_count').value, 10);
+    const content = parseInt(document.getElementById('content').value, 10);
+    const photos = parseInt(document.getElementById('photos').value, 10);
     const map = document.querySelector('.option-buttons[data-type="map"] .selected');
     const publicOption = document.querySelector('.option-buttons[data-type="public"] .selected');
 
@@ -218,7 +218,7 @@ async function fetchBlogContent() {
         content: content,
         photos: photos,
         map: map ? map.textContent === 'O' : false,
-        public: publicOption ? publicOption.textContent === 'O' : false
+        publicOption: publicOption ? publicOption.textContent === 'O' : false
     };
 
     console.log('보내는 데이터:', requestDto); // 보내는 데이터 확인
