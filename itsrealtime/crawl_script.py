@@ -52,7 +52,6 @@ def crawl(url):
         result['title'] = title
         result['totalTextLength'] = total_text_length
         result['imageCount'] = image_count
-        result['location'] = []
 
         # 지도 유무 확인
         map_elements = soup.select('a.se-map-info.__se_link')
@@ -61,7 +60,6 @@ def crawl(url):
             # 해당 요소 안에서 strong 태그 중 class가 se-map-title인 요소 찾기
             location = element.find('strong', class_='se-map-title')
             if location and location.text.strip() == '잇츠리얼타임 독서실 스터디카페':
-                result['location'].append(location.text.strip())
                 result['hasMap'] = True
                 break
 
@@ -70,8 +68,8 @@ def crawl(url):
         for element in location_elements:
             location = element.find('a')
             if location:
-                result['location'].append(location.text.strip())
                 result['hasMap'] = True
+                break
 
         return result
 
