@@ -28,7 +28,7 @@ def crawl(url):
         if title_element:
             title = title_element.get_text(strip=True)
         else:
-            title = "Title element not found"
+            title = ""
 
         # 특정 클래스명을 가진 요소 선택
         contents = soup.select('.se-main-container .se-component')
@@ -43,23 +43,35 @@ def crawl(url):
                 # 텍스트 요소 처리
                 text = content.get_text(strip=True)
                 total_text_length += len(text)
-            elif 'se-image' in content.get('class', []):
-                # 이미지 요소 처리
-                image_count += 1
+
+            img_tags = content.find_all('img')
+            if img_tags:
+                image_count += len(img_tags)
 
         # 결과 반환
         result['title'] = title
         result['totalTextLength'] = total_text_length
         result['imageCount'] = image_count
+        result['location'] = []
 
         # 지도 유무 확인
         map_elements = soup.select('a.se-map-info.__se_link')
-        for map_element in map_elements:
+
+        for element in map_elements:
             # 해당 요소 안에서 strong 태그 중 class가 se-map-title인 요소 찾기
-            location = map_element.find('strong', class_='se-map-title')
+            location = element.find('strong', class_='se-map-title')
             if location and location.text.strip() == '잇츠리얼타임 독서실 스터디카페':
+                result['location'].append(location.text.strip())
                 result['hasMap'] = True
                 break
+
+        # 지도 다른 버전
+        location_elements = soup.select('.location')
+        for element in location_elements:
+            location = element.find('a')
+            if location:
+                result['location'].append(location.text.strip())
+                result['hasMap'] = True
 
         return result
 
