@@ -44,9 +44,9 @@ def crawl(url):
                 text = content.get_text(strip=True)
                 total_text_length += len(text)
 
-            img_tags = content.find_all('img')
-            if img_tags:
-                image_count += len(img_tags)
+            img_tags = content.select('.se-module.se-module-image')
+            for img in img_tags:
+                image_count += 1
 
         # 결과 반환
         result['title'] = title
