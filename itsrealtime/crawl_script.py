@@ -1,4 +1,5 @@
 import json
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -22,7 +23,8 @@ def crawl(url):
         soup = BeautifulSoup(response.content, 'html.parser')
 
         # 타이틀 추출 및 검증
-        title_element = soup.find("span", attrs={'class': 'se-fs- se-ff-'})
+        title_element = soup.find(
+            "span", class_=re.compile(r'se-fs- se-ff-.*'))
         if title_element:
             title = title_element.get_text(strip=True)
         else:
