@@ -94,7 +94,13 @@ app.listen(port, () => {
 
 // Python 크롤링 스크립트 실행 함수
 function runPythonScript(url) {
-    const m_url = "https://m." + url.replace("https://", "")
+    let m_url;
+    if (url.includes("m.blog")) {
+        m_url = url;
+    } else {
+        m_url = "https://m." + url.replace("https://", "");
+    }
+
     return new Promise((resolve, reject) => {
         const pythonProcess = spawn('python', [
             path.join(__dirname, 'crawl_script.py'),
