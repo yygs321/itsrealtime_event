@@ -90,6 +90,15 @@
             <button type="button" class="button save-button" onclick="saveCurrentValue()">현재 값 저장하기</button>
         </div>
     </form>
+
+    <!-- 비공개 알림 창 -->
+    <div id="private-post-alert" class="private-alert" style="display:none;">
+        <div class="private-alert-content">
+            <p>비공개 글입니다.</p>
+            <button onclick="closePrivateAlert()">확인</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 

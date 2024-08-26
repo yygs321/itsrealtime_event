@@ -160,6 +160,17 @@ async function fetchBlogContent() {
     console.log('보내는 데이터:', requestDto); // 보내는 데이터 확인
 
     try {
+        // 블로그가 비공개인지 확인
+        const isPrivateBlog = await checkIfPrivateBlog(url);
+
+        if (isPrivateBlog) {
+            showPrivateAlert(); // 비공개 알림 창 띄우기
+
+            // 결과를 X 또는 O로 설정
+            setResult('result-public', !requestDto.publicOption, ''); // 공개 옵션을 선택한 경우 X, 비공개 선택한 경우 O
+            return; // 비공개 상태이므로 서버 요청을 생략
+        }
+
 
         const response = await fetch('http://localhost:3000/fetchBlogContent', {
             method: 'POST',
@@ -176,10 +187,43 @@ async function fetchBlogContent() {
         const data = await response.json(); // JSON 형식으로 파싱된 데이터 반환
         console.log('서버로부터 받은 데이터:', data);
 
+        // 응답 데이터에서 isPublic 값을 확인
+        if (data.isPublic === false) {
+            // 비공개 블로그일 때
+            showPrivateAlert(); // 비공개 알림 창 띄우기
+        }
+
         // 결과를 화면에 표시
         displayResults(data, requestDto);
+        
     } catch (error) {
         console.error('Error fetching blog content:', error);
         throw error;
+    }
+}
+
+// 비공개 알림 창을 여는 함수
+function showPrivateAlert() {
+    document.getElementById('private-post-alert').style.display = 'flex';
+}
+
+// 비공개 알림 창을 닫는 함수
+function closePrivateAlert() {
+    document.getElementById('private-post-alert').style.display = 'none';
+}
+
+// 블로그의 비공개 여부를 확인하는 함수
+async function checkIfPrivateBlog(url) {
+    try {
+        const response = await fetch(url, { method: 'HEAD' });
+
+        // 상태코드 확인
+        if (response.status === 403 || response.status === 404) {
+            return true;
+        }
+        return false; // 공개 블로그
+    } catch (error) {
+        console.error('Error checking blog privacy:', error);
+        return true; // 오류 발생 시 비공개로 간주
     }
 }

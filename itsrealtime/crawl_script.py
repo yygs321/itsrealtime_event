@@ -3,6 +3,28 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+def check_if_private_blog(url):
+    driver = webdriver.Chrome(executable_path='/path/to/chromedriver')  # chromedriver 경로 수정 필요
+
+    try:
+        driver.get(url)
+
+        # 최대 10초 동안 "비공개글" 텍스트가 포함된 팝업 탐지
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//*[contains(text(), '비공개글')]"))
+        )
+        return True  # 팝업이 발견되면 비공개 블로그로 간주
+    except:
+        return False  # 팝업이 발견되지 않으면 공개 블로그로 간주
+    finally:
+        driver.quit()
+
+
 
 def crawl(url):
     result = {
@@ -14,6 +36,13 @@ def crawl(url):
     }
 
     try:
+
+        # Selenium을 사용하여 비공개 블로그 여부 확인
+        is_private = check_if_private_blog(url)
+        if is_private:
+            result['isPublic'] = False
+            return result
+
         # 웹 페이지 요청
         response = requests.get(url)
         response.raise_for_status()  # HTTP 오류 확인
