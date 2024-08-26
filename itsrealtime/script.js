@@ -160,18 +160,6 @@ async function fetchBlogContent() {
     console.log('보내는 데이터:', requestDto); // 보내는 데이터 확인
 
     try {
-        // 블로그가 비공개인지 확인
-        const isPrivateBlog = await checkIfPrivateBlog(url);
-
-        if (isPrivateBlog) {
-            showPrivateAlert(); // 비공개 알림 창 띄우기
-
-            // 결과를 X 또는 O로 설정
-            setResult('result-public', !requestDto.publicOption, ''); // 공개 옵션을 선택한 경우 X, 비공개 선택한 경우 O
-            return; // 비공개 상태이므로 서버 요청을 생략
-        }
-
-
         const response = await fetch('http://localhost:3000/fetchBlogContent', {
             method: 'POST',
             headers: {
@@ -195,7 +183,7 @@ async function fetchBlogContent() {
 
         // 결과를 화면에 표시
         displayResults(data, requestDto);
-        
+
     } catch (error) {
         console.error('Error fetching blog content:', error);
         throw error;
