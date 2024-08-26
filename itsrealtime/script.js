@@ -199,19 +199,3 @@ function showPrivateAlert() {
 function closePrivateAlert() {
     document.getElementById('private-post-alert').style.display = 'none';
 }
-
-// 블로그의 비공개 여부를 확인하는 함수
-async function checkIfPrivateBlog(url) {
-    try {
-        const response = await fetch(url, { method: 'HEAD' });
-
-        // 상태코드 확인
-        if (response.status === 403 || response.status === 404) {
-            return true;
-        }
-        return false; // 공개 블로그
-    } catch (error) {
-        console.error('Error checking blog privacy:', error);
-        return true; // 오류 발생 시 비공개로 간주
-    }
-}
