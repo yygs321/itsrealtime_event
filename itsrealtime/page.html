@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-type"/>
+  <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" name="viewport"/>
+  <meta content="noindex,nofollow" name="robots">
+   <link href="/blog_192x192.png" rel="icon" type="image/png"/>
+   <link href="/blog_96x96.png" rel="apple-touch-icon-precomposed">
+    <meta content="SOMDAY : 네이버 블로그" property="og:title">
+     <meta content="https://blogpfthumb-phinf.pstatic.net/MjAyMjA2MDFfMTI5/MDAxNjU0MDE3MDMyODM2.NN3T6dblxEDgZcE-EKAQRG831NwNQdSWD-XzW2ihejkg.G6wFCieHAWVoPCV6XC8yQBq8hAtq0Pls1nbLFdH1WSQg.PNG.yygs321/profileImage.png?type=f204_204" property="og:image"/>
+     <meta content="당신의 모든 기록을 담는 공간" property="og:description"/>
+     <meta content="https://blog.naver.com/yygs321" property="og:url"/>
+     <meta content="blog" property="me:feed:serviceId"/>
+     <link charset="UTF-8" href="https://ssl.pstatic.net/t.static.blog/nmobile/versioning/lego_w-208018696_https.css" rel="stylesheet" type="text/css"/>
+     <title>
+      네이버 : 네이버 블로그
+     </title>
+    </meta>
+   </link>
+  </meta>
+ </head>
+ <body>
+  <div class="error_wrap">
+   <div class="error">
+    <i aria-label="!" class="error_icon">
+     <svg aria-hidden="true" height="52" width="52" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" fill-rule="evenodd" stroke="#03C75A" stroke-linecap="round" stroke-linejoin="round" transform="translate(3.25 3.25)">
+       <path d="M22.75 9.208v18.657m0 5.898v2.529" stroke-width="2.5">
+       </path>
+       <circle cx="22.75" cy="22.75" r="22.75" stroke-width="2">
+       </circle>
+      </g>
+     </svg>
+    </i>
+    <h1 class="error_h1">
+     비공개 게시물입니다.
+    </h1>
+    <div class="btn_area">
+     <button class="link" id="backBtn" type="button">
+      이전 화면으로
+     </button>
+    </div>
+   </div>
+  </div>
+  <script>
+   var gInAppUrl = "naverblog://blogapp";
+    var isInApp = false;
+    var backUrl = "https://m.blog.naver.com/yygs321?fromClosedPost=true"
+
+    document.getElementById("backBtn").addEventListener("click", function (e) {
+        if (typeof (isInApp) !== "undefined" && isInApp) {
+            location.href = gInAppUrl + "/historyBack";
+        } else {
+            if (typeof backUrl !== "undefined" && backUrl !== '') {
+                location.replace(backUrl);
+            } else {
+                goBackOrClose();
+            }
+        }
+    }, false);
+
+    function goBackOrClose() {
+        if (history.length <= 1) {
+            window.close();
+        } else {
+            history.back();
+        }
+    }
+  </script>
+ </body>
+</html>

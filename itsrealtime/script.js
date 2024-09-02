@@ -177,6 +177,7 @@ async function fetchBlogContent() {
 
         // 응답 데이터에서 isPublic 값을 확인
         if (data.isPublic === false) {
+            console.log('비공개 팝업창')
             // 비공개 블로그일 때
             showPrivateAlert(); // 비공개 알림 창 띄우기
         }

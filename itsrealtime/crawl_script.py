@@ -1,29 +1,8 @@
 import json
 import re
+from venv import logger
 import requests
 from bs4 import BeautifulSoup
-
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-def check_if_private_blog(url):
-    driver = webdriver.Chrome(executable_path='/path/to/chromedriver')  # chromedriver 경로 수정 필요
-
-    try:
-        driver.get(url)
-
-        # 최대 10초 동안 "비공개글" 텍스트가 포함된 팝업 탐지
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//*[contains(text(), '비공개글')]"))
-        )
-        return True  # 팝업이 발견되면 비공개 블로그로 간주
-    except:
-        return False  # 팝업이 발견되지 않으면 공개 블로그로 간주
-    finally:
-        driver.quit()
-
 
 
 def crawl(url):
@@ -36,21 +15,21 @@ def crawl(url):
     }
 
     try:
-
-        # Selenium을 사용하여 비공개 블로그 여부 확인
-        is_private = check_if_private_blog(url)
-        if is_private:
-            result['isPublic'] = False
-            return result
-
         # 웹 페이지 요청
         response = requests.get(url)
         response.raise_for_status()  # HTTP 오류 확인
-        result['isPublic'] = True  # 에러 없으면 전체공개
 
         # BeautifulSoup을 사용하여 HTML 파싱
         soup = BeautifulSoup(response.content, 'html.parser')
 
+
+        # 페이지 내용이 비어 있는지 확인
+        text_content = soup.get_text(strip=True)
+        if not text_content or text_content.isspace():
+            result['isPublic'] = False
+            return result
+
+        #result['isPublic'] = True  # 에러 없으면 전체공개
         # 타이틀 추출 및 검증
         title_element = soup.find(
             "span", class_=re.compile(r'se-fs- se-ff-.*'))
@@ -76,6 +55,9 @@ def crawl(url):
             img_tags = content.select('.se-module.se-module-image')
             for img in img_tags:
                 image_count += 1
+        
+        if total_text_length!=0:
+            result['isPublic'] = True  # 에러 없으면 전체공개
 
         # 결과 반환
         result['title'] = title
@@ -99,11 +81,9 @@ def crawl(url):
             if location:
                 result['hasMap'] = True
                 break
-
         return result
 
     except Exception as e:
-        # 오류 발생 시 처리
         result['isPublic'] = False
         return result
 
